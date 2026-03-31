@@ -5,9 +5,9 @@ React (class components) + Node.js (Express) admin UI for the `modules` MySQL da
 ## Features
 
 - **Products:** list, detail, create, edit, delete (including `product_attributes` on save). New uploads are stored under `server/uploads/` and exposed at **`http://<api-host>:3001/uploads/<filename>`**; the DB field `image_url` stores **only the file name** (e.g. `<uuid>.webp`). The admin UI resolves that to `/uploads/<filename>` (or `VITE_IMAGE_URL_PREFIX` + `/uploads/...` if set). Legacy rows with `/uploads/...` still work.
-- **Users:** list, detail, create, edit, delete. Data is stored in `registration`; the API keeps the `users` row in sync and uses bcrypt for passwords (compatible with Laravel-style hashes).
+- **Users:** list, detail, create, edit, delete. Data is stored in `users`; the API keeps the `users` row in sync and uses bcrypt for passwords (compatible with Laravel-style hashes).
 - **Chats:** list chat sessions and read messages per chat.
-- **Orders:** paginated list and read-only detail (line items from stored JSON). Backed by MySQL `orders` (linked to `registration` / `user_id`).
+- **Orders:** paginated list and read-only detail (line items from stored JSON). Backed by MySQL `orders` (linked to `users` / `id`).
 - **Pagination:** product, user, and chat list APIs support `?page=1&limit=20` (default **20**, max **100**) and return JSON `{ items, total, page, limit, totalPages }`.
 
 ## Prerequisites

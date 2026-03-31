@@ -10,10 +10,10 @@ router.get("/", async (req, res) => {
     const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM chats`);
     const [rows] = await pool.query(
       `SELECT c.id, c.user_id, c.session_id, c.created_at,
-              r.username, r.email,
+              u.username, u.email,
               (SELECT COUNT(*) FROM messages m WHERE m.chat_id = c.id) AS message_count
        FROM chats c
-       LEFT JOIN registration r ON r.id = c.user_id
+       LEFT JOIN users u ON u.id = c.user_id
        ORDER BY c.id DESC
        LIMIT ? OFFSET ?`,
       [limit, offset]
@@ -32,9 +32,9 @@ router.get("/:chatId/messages", async (req, res) => {
   }
   try {
     const [[chat]] = await pool.query(
-      `SELECT c.*, r.username, r.email
+      `SELECT c.*, u.username, u.email
        FROM chats c
-       LEFT JOIN registration r ON r.id = c.user_id
+       LEFT JOIN users u ON u.id = c.user_id
        WHERE c.id = ?`,
       [chatId]
     );

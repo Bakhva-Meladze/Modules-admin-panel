@@ -850,6 +850,57 @@ td.col-thumb {
   color: var(--text);
 }
 
+.user-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.user-detail-lede {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+}
+
+.user-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.user-detail-card {
+  max-width: none;
+}
+
+.user-detail-card-title {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.user-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.user-detail-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.user-detail-section-copy {
+  margin: 0.35rem 0 0;
+}
+
+@media (max-width: 760px) {
+  .user-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .product-detail-img {
   display: block;
   max-width: 100%;

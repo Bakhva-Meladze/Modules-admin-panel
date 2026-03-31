@@ -54,13 +54,17 @@ export default class UserDetail extends Component {
     if (loading) return <p className="muted">{t("common.loading")}</p>;
     if (error) return <div className="error-banner">{error}</div>;
     if (!user) return <p className="muted">{t("users.notFound", { id })}</p>;
-
-    const app = user.app_user;
+    const orders = Array.isArray(user.orders) ? user.orders : [];
 
     return (
-      <div>
+      <div className="user-detail-page">
         <div className="page-header">
-          <h2>{user.username}</h2>
+          <div>
+            <h2>{user.username}</h2>
+            <p className="muted user-detail-lede">
+              {user.email || t("common.dash")}
+            </p>
+          </div>
           <div style={{ display: "flex", gap: "0.5rem" }}>
             <Link to="/users" className="btn btn-ghost">
               {t("common.back")}
@@ -74,34 +78,77 @@ export default class UserDetail extends Component {
           </div>
         </div>
 
-        <div className="detail-card">
-          <dl>
-            <dt>{t("userDetail.registrationId")}</dt>
-            <dd>{user.id}</dd>
-            <dt>{t("col.username")}</dt>
-            <dd>{user.username}</dd>
-            <dt>{t("col.email")}</dt>
-            <dd>{user.email}</dd>
-          </dl>
-        </div>
+        <div className="user-detail-grid">
+          <section className="detail-card user-detail-card">
+            <h3 className="user-detail-card-title">{t("userDetail.profile")}</h3>
+            <dl>
+              <dt>{t("userDetail.registrationId")}</dt>
+              <dd>{user.id}</dd>
+              <dt>{t("col.username")}</dt>
+              <dd>{user.username}</dd>
+              <dt>{t("col.email")}</dt>
+              <dd>{user.email || t("common.dash")}</dd>
+            </dl>
+          </section>
 
-        <h3 style={{ marginTop: "1.5rem", fontSize: "1.1rem" }}>{t("userDetail.appUserRow")}</h3>
-        <div className="detail-card" style={{ marginTop: "0.5rem" }}>
-          {app ? (
+          <section className="detail-card user-detail-card">
+            <h3 className="user-detail-card-title">{t("userDetail.activity")}</h3>
             <dl>
               <dt>{t("userDetail.usersId")}</dt>
-              <dd>{app.id}</dd>
-              <dt>{t("userDetail.userIdCol")}</dt>
-              <dd>{app.user_id}</dd>
+              <dd>{user.id}</dd>
               <dt>{t("userDetail.created")}</dt>
-              <dd>{app.created_at || t("common.dash")}</dd>
+              <dd>{user.created_at || t("common.dash")}</dd>
               <dt>{t("userDetail.updated")}</dt>
-              <dd>{app.updated_at || t("common.dash")}</dd>
+              <dd>{user.updated_at || t("common.dash")}</dd>
             </dl>
-          ) : (
-            <p className="muted">{t("userDetail.noUsersRow")}</p>
-          )}
+          </section>
         </div>
+
+        <section className="user-detail-section">
+          <div className="user-detail-section-header">
+            <div>
+              <h3 className="user-detail-card-title">{t("userDetail.orders")}</h3>
+              <p className="muted user-detail-section-copy">
+                {t("userDetail.ordersDesc", { count: orders.length })}
+              </p>
+            </div>
+          </div>
+
+          {orders.length === 0 ? (
+            <div className="detail-card">
+              <p className="muted" style={{ margin: 0 }}>{t("userDetail.noOrders")}</p>
+            </div>
+          ) : (
+            <div className="table-wrap">
+              <table className="data">
+                <thead>
+                  <tr>
+                    <th>{t("col.id")}</th>
+                    <th>{t("col.status")}</th>
+                    <th>{t("col.total")}</th>
+                    <th>{t("col.placedAt")}</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.id}>
+                      <td>{order.id}</td>
+                      <td>{order.status || t("common.dash")}</td>
+                      <td>{order.total_price}</td>
+                      <td>{order.created_at || t("common.dash")}</td>
+                      <td>
+                        <Link to={`/orders/${order.id}`} className="btn btn-ghost">
+                          {t("common.view")}
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
     );
   }

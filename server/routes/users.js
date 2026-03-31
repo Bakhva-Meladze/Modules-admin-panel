@@ -8,11 +8,11 @@ const router = Router();
 router.get("/", async (req, res) => {
   try {
     const { page, limit, offset } = parsePagination(req.query);
-    const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM registration`);
+    const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM users`);
     const [rows] = await pool.query(
-      `SELECT r.id, r.username, r.email
-       FROM registration r
-       ORDER BY r.id DESC
+      `SELECT u.id, u.username, u.email
+       FROM users u
+       ORDER BY u.id DESC
        LIMIT ? OFFSET ?`,
       [limit, offset]
     );
@@ -29,13 +29,27 @@ router.get("/:id", async (req, res) => {
     return res.status(400).json({ error: "Invalid id" });
   }
   try {
-    const [[reg]] = await pool.query(`SELECT id, username, email FROM registration WHERE id = ?`, [id]);
-    if (!reg) return res.status(404).json({ error: "Not found" });
-    const [[urow]] = await pool.query(
-      `SELECT id, username, email, created_at, updated_at, user_id FROM users WHERE id = ? OR user_id = ? LIMIT 1`,
-      [id, id]
+    const [[user]] = await pool.query(
+      `SELECT id, username, email, created_at, updated_at
+       FROM users
+       WHERE id = ?
+       LIMIT 1`,
+      [id]
     );
-    res.json({ ...reg, app_user: urow || null });
+    if (!user) return res.status(404).json({ error: "Not found" });
+
+    const [orders] = await pool.query(
+      `SELECT id, status, total_price, created_at
+       FROM orders
+       WHERE user_id = ?
+       ORDER BY id DESC`,
+      [id]
+    );
+
+    res.json({
+      ...user,
+      orders,
+    });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Failed to load user" });
@@ -106,10 +120,9 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ error: "Not found" });
     }
 
-    await conn.query(`UPDATE users SET username = ?, email = ?, updated_at = NOW() WHERE id = ? OR user_id = ?`, [
+    await conn.query(`UPDATE users SET username = ?, email = ?, updated_at = NOW() WHERE id = ?`, [
       username,
       email,
-      id,
       id,
     ]);
 
@@ -146,7 +159,7 @@ router.delete("/:id", async (req, res) => {
     }
 
     await conn.query(`DELETE FROM orders WHERE user_id = ?`, [id]);
-    await conn.query(`DELETE FROM users WHERE id = ? OR user_id = ?`, [id, id]);
+    await conn.query(`DELETE FROM users WHERE id = ?`, [id]);
     const [dr] = await conn.query(`DELETE FROM registration WHERE id = ?`, [id]);
 
     await conn.commit();

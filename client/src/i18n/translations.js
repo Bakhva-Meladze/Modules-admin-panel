@@ -139,6 +139,11 @@ export const translations = {
     "userDetail.updated": "Updated",
     "userDetail.noUsersRow": "No matching row in `users` table.",
     "userDetail.deleteConfirm": 'Delete "{name}"?',
+    "userDetail.profile": "Profile",
+    "userDetail.activity": "Account activity",
+    "userDetail.orders": "Orders",
+    "userDetail.ordersDesc": "{count} order(s) linked to this user.",
+    "userDetail.noOrders": "This user has no orders yet.",
 
     "userForm.newTitle": "New user",
     "userForm.editTitle": "Edit user",
@@ -299,6 +304,11 @@ export const translations = {
     "userDetail.updated": "განახლებულია",
     "userDetail.noUsersRow": "ცხრილ users-ში შესაბამისი ჩანაწერი არ არის.",
     "userDetail.deleteConfirm": 'წავშალოთ „{name}“?',
+    "userDetail.profile": "პროფილი",
+    "userDetail.activity": "აქტივობა",
+    "userDetail.orders": "შეკვეთები",
+    "userDetail.ordersDesc": "ამ მომხმარებელზე მიბმულია {count} შეკვეთა.",
+    "userDetail.noOrders": "ამ მომხმარებელს შეკვეთები ჯერ არ აქვს.",
 
     "userForm.newTitle": "ახალი მომხმარებელი",
     "userForm.editTitle": "მომხმარებლის რედაქტირება",

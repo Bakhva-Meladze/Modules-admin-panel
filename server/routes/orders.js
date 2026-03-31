@@ -28,9 +28,9 @@ router.get("/", async (req, res) => {
     const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM orders`);
     const [rows] = await pool.query(
       `SELECT o.id, o.user_id, o.status, o.total_price, o.created_at, o.updated_at,
-              r.username, r.email
+              u.username, u.email
        FROM orders o
-       LEFT JOIN registration r ON r.id = o.user_id
+       LEFT JOIN users u ON u.id = o.user_id
        ORDER BY o.id DESC
        LIMIT ? OFFSET ?`,
       [limit, offset]
@@ -54,9 +54,9 @@ router.get("/:id", async (req, res) => {
   try {
     const [[row]] = await pool.query(
       `SELECT o.id, o.user_id, o.status, o.total_price, o.created_at, o.updated_at, o.items,
-              r.username, r.email
+              u.username, u.email
        FROM orders o
-       LEFT JOIN registration r ON r.id = o.user_id
+       LEFT JOIN users u ON u.id = o.user_id
        WHERE o.id = ?`,
       [id]
     );
