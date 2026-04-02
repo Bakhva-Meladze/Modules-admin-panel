@@ -64,16 +64,17 @@ export default class UserForm extends Component {
     e.preventDefault();
     const { username, email, password } = this.state;
     const nav = this.props.router?.navigate;
+    const trimmedPassword = password.trim();
 
     try {
       if (this.isEdit()) {
         const id = this.props.router?.params?.id;
         const body = { username, email };
-        if (password.trim()) body.password = password;
+        if (trimmedPassword) body.password = password;
         await apiSend("PUT", `/api/users/${id}`, body);
         nav(`/users/${id}`);
       } else {
-        if (!password.trim()) {
+        if (!trimmedPassword) {
           alert(this.context.t("userForm.passwordRequired"));
           return;
         }
@@ -139,7 +140,7 @@ export default class UserForm extends Component {
                   type="password"
                   value={password}
                   onChange={this.handleChange("password")}
-                  autoComplete={edit ? "new-password" : "new-password"}
+                  autoComplete="new-password"
                   required={!edit}
                 />
               </label>

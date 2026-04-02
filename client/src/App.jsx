@@ -18,6 +18,12 @@ const ProductFormR = withRouter(ProductForm);
 const UserDetailR = withRouter(UserDetail);
 const UserFormR = withRouter(UserForm);
 const OrderDetailR = withRouter(OrderDetail);
+const NAV_ITEMS = [
+  { to: "/products", labelKey: "nav.products" },
+  { to: "/users", labelKey: "nav.users" },
+  { to: "/chats", labelKey: "nav.chats" },
+  { to: "/orders", labelKey: "nav.orders" },
+];
 
 export default class App extends Component {
   static contextType = LanguageContext;
@@ -36,35 +42,28 @@ export default class App extends Component {
           <div className="app-shell">
             <aside className="sidebar">
               <nav aria-label={t("nav.main")}>
-                <NavLink to="/products" className={({ isActive }) => (isActive ? "active" : "")}>
-                  {t("nav.products")}
-                </NavLink>
-                <NavLink to="/users" className={({ isActive }) => (isActive ? "active" : "")}>
-                  {t("nav.users")}
-                </NavLink>
-                <NavLink to="/chats" className={({ isActive }) => (isActive ? "active" : "")}>
-                  {t("nav.chats")}
-                </NavLink>
-                <NavLink to="/orders" className={({ isActive }) => (isActive ? "active" : "")}>
-                  {t("nav.orders")}
-                </NavLink>
+                {NAV_ITEMS.map(({ to, labelKey }) => (
+                  <NavLink key={to} to={to} className={({ isActive }) => (isActive ? "active" : "")}>
+                    {t(labelKey)}
+                  </NavLink>
+                ))}
               </nav>
             </aside>
             <main className="page">
-            <Routes>
-              <Route path="/" element={<Navigate to="/products" replace />} />
-              <Route path="/products" element={<ProductsList />} />
-              <Route path="/products/new" element={<ProductFormR />} />
-              <Route path="/products/:id/edit" element={<ProductFormR />} />
-              <Route path="/products/:id" element={<ProductDetailR />} />
-              <Route path="/users" element={<UsersList />} />
-              <Route path="/users/new" element={<UserFormR />} />
-              <Route path="/users/:id/edit" element={<UserFormR />} />
-              <Route path="/users/:id" element={<UserDetailR />} />
-              <Route path="/chats" element={<ChatsPage />} />
-              <Route path="/orders" element={<OrdersList />} />
-              <Route path="/orders/:id" element={<OrderDetailR />} />
-            </Routes>
+              <Routes>
+                <Route path="/" element={<Navigate to="/products" replace />} />
+                <Route path="/products" element={<ProductsList />} />
+                <Route path="/products/new" element={<ProductFormR />} />
+                <Route path="/products/:id/edit" element={<ProductFormR />} />
+                <Route path="/products/:id" element={<ProductDetailR />} />
+                <Route path="/users" element={<UsersList />} />
+                <Route path="/users/new" element={<UserFormR />} />
+                <Route path="/users/:id/edit" element={<UserFormR />} />
+                <Route path="/users/:id" element={<UserDetailR />} />
+                <Route path="/chats" element={<ChatsPage />} />
+                <Route path="/orders" element={<OrdersList />} />
+                <Route path="/orders/:id" element={<OrderDetailR />} />
+              </Routes>
             </main>
           </div>
         </div>

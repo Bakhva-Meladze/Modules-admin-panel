@@ -9,9 +9,7 @@ export function LanguageProvider({ children }) {
     try {
       const s = localStorage.getItem(STORAGE_KEY);
       if (s === "en" || s === "ka") return s;
-    } catch {
-      /* ignore */
-    }
+    } catch {}
     return fallbackLocale;
   });
 
@@ -20,9 +18,7 @@ export function LanguageProvider({ children }) {
     setLocaleState(loc);
     try {
       localStorage.setItem(STORAGE_KEY, loc);
-    } catch {
-      /* ignore */
-    }
+    } catch {}
   }, []);
 
   useEffect(() => {

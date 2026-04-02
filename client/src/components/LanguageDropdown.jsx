@@ -14,7 +14,8 @@ export default class LanguageDropdown extends Component {
   };
 
   pick = (code) => {
-    this.props.setLocale(code);
+    const { setLocale } = this.props;
+    setLocale(code);
     this.close();
   };
 

@@ -12,8 +12,8 @@ function parseAttributes(body) {
   if (!raw) return [];
   if (typeof raw === "string") {
     try {
-      const p = JSON.parse(raw);
-      return Array.isArray(p) ? p : [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
     }
@@ -21,12 +21,11 @@ function parseAttributes(body) {
   return Array.isArray(raw) ? raw : [];
 }
 
-/** Store only the file basename in `products.image_url` (e.g. `uuid.webp`), not `/uploads/...`. */
 function normalizeStoredImageValue(raw) {
-  const s = String(raw || "").trim();
-  if (!s) return "";
-  if (/^https?:\/\//i.test(s)) return s;
-  const stripped = s.replace(/^\/+uploads\/+/i, "");
+  const value = String(raw || "").trim();
+  if (!value) return "";
+  if (/^https?:\/\//i.test(value)) return value;
+  const stripped = value.replace(/^\/+uploads\/+/i, "");
   const base = path.basename(stripped);
   if (!base || base === "." || base === "..") return "";
   return base;
@@ -48,9 +47,7 @@ async function removeStoredUpload(imageUrl) {
   if (!full.startsWith(root + path.sep) && full !== root) return;
   try {
     await fs.unlink(full);
-  } catch {
-    /* ignore */
-  }
+  } catch {}
 }
 
 router.get("/", async (req, res) => {

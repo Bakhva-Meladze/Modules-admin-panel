@@ -1,8 +1,3 @@
-/**
- * Turn DB `products.image_url` into a browser URL.
- * Stored value is usually a bare filename (e.g. `uuid.webp`); legacy rows may use `/uploads/...`
- * or `uploads/...`. Accepts non-ASCII / punctuation in the basename (encoded in the path).
- */
 export function publicImageSrc(imageUrl) {
   if (imageUrl == null) return null;
   const raw = String(imageUrl).trim();
